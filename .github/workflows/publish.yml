@@ -13,6 +13,7 @@ on:
 
 jobs:
   build-and-push:
+    if: github.repository_owner == 'openmrs'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,18 +24,21 @@ jobs:
         es_version: ["8.15.3"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca11a51296c28c638c5d43e2f8f2bada123e0b # v3.10.0
+
       - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@369eb591f429131d8269d8c71a16a4c6fbb0e3c9 # v5.7.0
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -42,7 +46,7 @@ jobs:
             type=raw,value=latest,enable=${{ matrix.es_version == '8.15.3' }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@b32b51a8b6527d0b0c8d3eac99e6d250acb39f37 # v6.14.0
         with:
           push: true
           build-args: |
