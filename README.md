@@ -4,10 +4,30 @@ Elasticsearch Docker image with `analysis-phonetic` plugin pre-installed for Ope
 
 ## Usage
 
+Reference the custom image in your `values.yaml` or `kind-openmrs.yaml`.
+The `image` field is set at the top level of the ECK Elasticsearch spec,
+alongside `version`. **You must also remove any `initContainers` that install
+`analysis-phonetic`** — the plugin is already baked into this image.
+
 ```yaml
 elasticsearch-eck:
   version: "8.15.3"
   image: ghcr.io/openmrs/openmrs-contrib-elasticsearch:8.15.3
+  nodeSets:
+    - name: default
+      count: 1
+      config:
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          # No initContainers needed — analysis-phonetic is pre-installed
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  memory: "2Gi"
+                limits:
+                  memory: "2Gi"
 ```
 
 ## Build locally

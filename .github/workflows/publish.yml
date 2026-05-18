@@ -19,9 +19,8 @@ jobs:
       contents: read
       packages: write
 
-    strategy:
-      matrix:
-        es_version: ["8.15.3"]
+    env:
+      ES_VERSION: ${{ github.event.inputs.es_version || '8.15.3' }}
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -42,14 +41,16 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=${{ matrix.es_version }}
-            type=raw,value=latest,enable=${{ matrix.es_version == '8.15.3' }}
+            type=raw,value=${{ env.ES_VERSION }}
+            type=raw,value=latest,enable=${{ env.ES_VERSION == '8.15.3' }}
 
       - name: Build and push
         uses: docker/build-push-action@b32b51a8b6527d0b0c8d3eac99e6d250acb39f37 # v6.14.0
         with:
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
-            ES_VERSION=${{ matrix.es_version }}
+            ES_VERSION=${{ env.ES_VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
