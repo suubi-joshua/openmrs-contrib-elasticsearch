@@ -12,7 +12,7 @@ alongside `version`. **You must also remove any `initContainers` that install
 ```yaml
 elasticsearch-eck:
   version: "8.15.3"
-  image: ghcr.io/openmrs/openmrs-contrib-elasticsearch:8.15.3
+  image: openmrs/openmrs-contrib-elasticsearch:8.15.3
   nodeSets:
     - name: default
       count: 1
@@ -38,4 +38,4 @@ docker build --build-arg ES_VERSION=8.15.3 -t openmrs-contrib-elasticsearch:8.15
 
 ## Published images
 
-Published to `ghcr.io/openmrs/openmrs-contrib-elasticsearch` via GitHub Actions on push to `main`.
+Published to Docker Hub as `openmrs/openmrs-contrib-elasticsearch` via GitHub Actions on push to `main`.
