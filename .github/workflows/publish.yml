@@ -33,11 +33,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca11a51296c28c638c5d43e2f8f2bada123e0b # v3.10.0
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
       - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@369eb591f429131d8269d8c71a16a4c6fbb0e3c9 # v5.7.0
+        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -45,7 +45,7 @@ jobs:
             type=raw,value=latest,enable=${{ env.ES_VERSION == '8.15.3' }}
 
       - name: Build and push
-        uses: docker/build-push-action@b32b51a8b6527d0b0c8d3eac99e6d250acb39f37 # v6.14.0
+        uses: docker/build-push-action@0adf9959216b96bec444f325f1e493d4aa344497 # v6.14.0
         with:
           push: true
           cache-from: type=gha
